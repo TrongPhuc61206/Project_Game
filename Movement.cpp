@@ -1,150 +1,119 @@
 #include "Movement.h"
 #include <iostream>
 #include "Board.h"
+#include "Queue.h"
 
 using namespace std;
 
 void moveLeft(){
     for(int i = 0; i < size; i++){
-        int tmp[size] = {0}; // Mảng tạm để xử lí trên hàng i
-        int idx = 0;
-
-
-        // Dồn các số khác 0 về bên trái
+        int frontIndex = 0, rearIndex = -1, sizequeue = 0;
+        // Dồn các ô khác 0 về bên trái, nếu 2 ô bằng nhau thì gộp lại thành 1 ô
         for(int j = 0; j < size; j++){
             if(board[i][j] != 0){
-                tmp[idx++] = board[i][j];
+                if(sizequeue == 0){
+                    enqueue(board[i][j]);
+                }
+                else{
+                    if(queue[rearIndex] == board[i][j]){
+                        int tmp = board[i][j] * 2;
+                        queue[rearIndex] = tmp;
+                    }
+                    else{
+                        enqueue(board[i][j]);
+                    }
+                }
             }
         }
 
-        // Gộp các số giống nhau
-        for(int j = 0; j < idx; j++){
-            if(tmp[j] == tmp[j + 1] && tmp[j] != 0){
-                tmp[j] *= 2;
-                tmp[j + 1] = 0;
-            }
-        }
-
-        // Dồn lại 1 lần nữa (vì sau lần gộp đầu tiên sẽ xuất hiện những ô có giá trị 0)
-        int newtemp[size] = {0};
-        int index = 0;
-        for(int j = 0; j < size; j++){
-            if(tmp[j] != 0){
-                newtemp[index++] = tmp[j];
-            }
-        }
 
         // Cập nhật lại giá trị của hàng i sau khi moveLeft
-        for(int j = 0; j < size; j++){
-            board[i][j] = newtemp[j];
+        for(int j = frontIndex; j < size + frontIndex; j++){
+            board[i][j] = queue[j];
         }
     }
 }
 
 void moveRight(){
     for(int i = 0; i < size; i++){
-        int tmp[size] = {0}; // Mảng tạm để xử lí trên hàng i
-        int idx = size - 1; // Bắt đầu từ bên phải
-
-        // Dồn các số khác 0 về bên phải
+        int frontIndex = 0, rearIndex = -1, sizequeue = 0;
+        // Dồn các ô khác 0 về bên phải, nếu 2 ô bằng nhau thì gộp lại thành 1 ô
         for(int j = size - 1; j >= 0; j--){
             if(board[i][j] != 0){
-                tmp[idx--] = board[i][j];
-            }
-        }
-
-        // Gộp các số giống nhau
-        for(int j = size - 1; j > 0; j--){
-            if(tmp[j] == tmp[j - 1] && tmp[j] != 0){
-                tmp[j] *= 2;
-                tmp[j - 1] = 0;
-            }
-        }
-
-        // Dồn lại 1 lần nữa
-        int newtemp[size] = {0};
-        int index = size - 1;
-        for(int j = size - 1; j >= 0; j--){
-            if(tmp[j] != 0){
-                newtemp[index--] = tmp[j];
+                if(sizequeue == 0){
+                    enqueue(board[i][j]);
+                }
+                else{
+                    if(queue[rearIndex] == board[i][j]){
+                        int tmp = board[i][j] * 2;
+                        queue[rearIndex] = tmp;
+                    }
+                    else{
+                        enqueue(board[i][j]);
+                    }
+                }
             }
         }
 
         // Cập nhật lại giá trị của hàng i sau khi moveRight
         for(int j = 0; j < size; j++){
-            board[i][j] = newtemp[j];
+            board[i][size - 1 - j] = queue[frontIndex + j];
         }
     }
 }
 
 void moveUp(){
     for(int j = 0; j < size; j++){
-        int tmp[size] = {0}; // Mảng tạm để xử lí trên cột j
-        int idx = 0;
-
-        // Dồn các số khác 0 lên trên
+        int frontIndex = 0, rearIndex = -1, sizequeue = 0;
+        // Dồn các ô khác 0 lên trên, nếu 2 ô bằng nhau thì gộp lại thành 1 ô
         for(int i = 0; i < size; i++){
             if(board[i][j] != 0){
-                tmp[idx++] = board[i][j];
-            }
-        }
-
-        // Gộp các số giống nhau
-        for(int i = 0; i < idx; i++){
-            if(tmp[i] == tmp[i + 1] && tmp[i] != 0){
-                tmp[i] *= 2;
-                tmp[i + 1] = 0;
-            }
-        }
-
-        // Dồn lại 1 lần nữa
-        int newtemp[size] = {0};
-        int index = 0;
-        for(int i = 0; i < size; i++){
-            if(tmp[i] != 0){
-                newtemp[index++] = tmp[i];
+                if(sizequeue == 0){
+                    enqueue(board[i][j]);
+                }
+                else{
+                    if(queue[rearIndex] == board[i][j]){
+                        int tmp = board[i][j] * 2;
+                        queue[rearIndex] = tmp;
+                    }
+                    else{
+                        enqueue(board[i][j]);
+                    }
+                }
             }
         }
 
         // Cập nhật lại giá trị của cột j sau khi moveUp
         for(int i = 0; i < size; i++){
-            board[i][j] = newtemp[i];
+            board[i][j] = queue[frontIndex + i];
         }
     }
 }
 
 void moveDown(){
     for(int j = 0; j < size; j++){
-        int tmp[size] = {0}; // Mảng tạm để xử lí trên cột j
-        int idx = size - 1;
-
-        // Dồn các số khác 0 xuống dưới
+        int frontIndex = 0, rearIndex = -1, sizequeue = 0;
+        // Dồn các ô khác 0 xuống dưới, nếu 2 ô bằng nhau thì gộp lại thành 1 ô
         for(int i = size - 1; i >= 0; i--){
             if(board[i][j] != 0){
-                tmp[idx--] = board[i][j];
-            }
-        }
-
-        // Gộp các số giống nhau
-        for(int i = size - 1; i > 0; i--){
-            if(tmp[i] == tmp[i - 1] && tmp[i] != 0){
-                tmp[i] *= 2;
-                tmp[i - 1] = 0;
-            }
-        }
-
-        // Dồn lại 1 lần nữa
-        int newtemp[size] = {0};
-        int index = size - 1;
-        for(int i = size - 1; i >= 0; i--){
-            if(tmp[i] != 0){
-                newtemp[index--] = tmp[i];
+                if(sizequeue == 0){
+                    enqueue(board[i][j]);
+                }
+                else{
+                    if(queue[rearIndex] == board[i][j]){
+                        int tmp = board[i][j] * 2;
+                        queue[rearIndex] = tmp;
+                    }
+                    else{
+                        enqueue(board[i][j]);
+                    }
+                }
             }
         }
 
         // Cập nhật lại giá trị của cột j sau khi moveDown
         for(int i = 0; i < size; i++){
-            board[i][j] = newtemp[i];
+            board[size - 1 - i][j] = queue[frontIndex + i];
         }
     }
 }
@@ -159,4 +128,3 @@ bool canMove(){
     }
     return false;
 }
-#include <iostream>
