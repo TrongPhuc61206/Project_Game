@@ -7,15 +7,18 @@ using namespace std;
 
 int main() 
 {
-    cout << "Nhap n: ";
+    cout << "Nhap kich thuoc bang: ";
     int n;
     cin >> n;
 
     initBoard(n);
-    printBoard();
 
     while (canMove()) 
     {
+        system("cls"); // Xóa màn hình trước khi hiển thị lại bảng (Windows)
+        printBoard();  // Hiển thị bảng game
+        showInstructions(); // Hiển thị hướng dẫn ngay bên dưới bảng
+
         char c;
         do 
         {
@@ -23,14 +26,12 @@ int main()
         } 
         while (c == '\0'); // Lặp lại nếu nhập sai ký tự
 
-        cout << c << endl;
         if (c == 'w') moveUp();
         if (c == 's') moveDown();
         if (c == 'a') moveLeft();
         if (c == 'd') moveRight();
 
         addRandom();
-        printBoard();
     }
 
     cout << "Game Over!" << endl;
