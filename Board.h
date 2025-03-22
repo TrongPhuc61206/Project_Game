@@ -1,5 +1,4 @@
-#ifndef BOARD.H
-#define BOARD.H
+#pragma once
 
 using namespace std;
 
@@ -9,4 +8,3 @@ void initBoard(int newsize);
 void addRandom();
 void printBoard();
 
-#endif
