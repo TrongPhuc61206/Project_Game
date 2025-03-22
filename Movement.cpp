@@ -97,18 +97,47 @@ void moveDown() {
     }
 }
 
-bool canMove() {
+bool hasEmptyTile() 
+{
     for (int i = 0; i < size; i++) {
         for (int j = 0; j < size; j++) {
-            if (board[i][j] == 2048) // Thắng cuộc
-            {
-                cout << "Chuc mung ban da chien thang. ";
-                return false; // Trả về false để dừng game
-            }
-            if (board[i][j] == 0) return true; // Còn ô trống
-            if (i + 1 < size && board[i][j] == board[i + 1][j]) return true; // Có thể di chuyển lên/xuống
-            if (j + 1 < size && board[i][j] == board[i][j + 1]) return true; // Có thể di chuyển trái/phải
+            if (board[i][j] == 0) return true; // Tìm thấy ô trống
         }
     }
-    return false; // Không thể di chuyển
+    return false;
+}
+
+bool canMerge() 
+{
+    for (int i = 0; i < size; i++) 
+    {
+        for (int j = 0; j < size; j++) 
+        {
+            if ((i + 1 < size && board[i][j] == board[i + 1][j]) || 
+                (j + 1 < size && board[i][j] == board[i][j + 1])) 
+                return true; // Có thể gộp ô
+        }
+    }
+    return false;
+}
+
+bool canMove() 
+{
+    // Kiểm tra điều kiện thắng (2048) đầu tiên
+    for (int i = 0; i < size; i++) 
+    {
+        for (int j = 0; j < size; j++) 
+        {
+            if (board[i][j] == 2048) 
+            {
+                cout << "Chuc mung, ban da dat 2024" << endl;
+                return true; // Cho phép tiếp tục chơi sau chiến thắng
+            }
+        }
+    }
+
+    // Kiểm tra ô trống hoặc khả năng gộp ô
+    if (hasEmptyTile() || canMerge()) return true;
+
+    return false;
 }
