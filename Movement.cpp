@@ -100,6 +100,11 @@ void moveDown() {
 bool canMove() {
     for (int i = 0; i < size; i++) {
         for (int j = 0; j < size; j++) {
+            if (board[i][j] == 2048) // Thắng cuộc
+            {
+                cout << "Chuc mung ban da chien thang. ";
+                return false; // Trả về false để dừng game
+            }
             if (board[i][j] == 0) return true; // Còn ô trống
             if (i + 1 < size && board[i][j] == board[i + 1][j]) return true; // Có thể di chuyển lên/xuống
             if (j + 1 < size && board[i][j] == board[i][j + 1]) return true; // Có thể di chuyển trái/phải
