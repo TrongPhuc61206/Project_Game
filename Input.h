@@ -1,6 +1,5 @@
-#ifndef INPUT.H
-#define INPUT.H
+#pragma once
 
 char getMove(); // Hàm đọc phím từ người chơi
 
-#endif
+
