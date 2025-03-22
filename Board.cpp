@@ -23,17 +23,25 @@ void initBoard(int newsize){
 }
 
 // Hiển thị bảng chơi
-void printBoard(){
-    for(int i = 0; i < size; i++){
-        for(int j = 0; j < size; j++){
-            if(board[i][j] != 0){
-                cout << board[i][j] << "\t";
-            }
-            else{
-                cout << "\t";
-            }
-            cout << endl;
+void printBoard() {
+    system("cls"); // Xóa màn hình 
+    cout << "+";
+    for (int i = 0; i < size; i++) cout << "------+"; // Viền ngang trên
+    cout << endl;
+
+    for (int i = 0; i < size; i++) {
+        for (int j = 0; j < size; j++) {
+            cout << "|";
+            if (board[i][j] == 0)
+                cout << "      "; // Ô trống
+            else
+                cout << " " << board[i][j] << string(5 - to_string(board[i][j]).length(), ' ');
         }
+        cout << "|" << endl;
+
+        cout << "+";
+        for (int j = 0; j < size; j++) cout << "------+"; // Viền ngang dưới
+        cout << endl;
     }
 }
 
@@ -52,6 +60,6 @@ void addRandom(){
     }
     if(count > 0){
         int n = rand() % count;
-        board[emptyCells[n][0]][emptyCells[n][1]] = (rand() % 10 == 0) ? 4 : 2;
+        board[emptyCells[n][0]][emptyCells[n][1]] = (rand() % 50 == 0) ? 4 : 2;
     }
 }
