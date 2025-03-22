@@ -1,5 +1,4 @@
-#ifndef MOVEMENT.H
-#define MOVEMENT.H
+#pragma once
 
 using namespace std;
 
@@ -10,4 +9,4 @@ void moveDown();
 bool canMove();
 
 
-#endif
+
