@@ -23,8 +23,8 @@ char getMove() {
     char key;
     while (true) 
     { 
-        key = _getch(); // Đọc phím từ người chơi
-        key = tolower(key); // Chuyển về chữ thường để dễ xử lý
+        key = _getch(); // Read keys from player
+        key = tolower(key); // Convert to lowercase for ease of handling
 
         if (key == 'w' || key == 'a' || key == 's' || key == 'd') 
         {
