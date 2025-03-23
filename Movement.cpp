@@ -5,93 +5,105 @@
 
 using namespace std;
 
+void clearQueue() 
+{
+    frontIndex = 0;
+    rearIndex = -1;
+    sizequeue = 0;
+}
+
+
 void moveLeft() {
-    for (int i = 0; i < size; i++) {
-        frontIndex = 0, rearIndex = -1, sizequeue = 0; // Reset queue cho mỗi hàng
-        for (int j = 0; j < size; j++) {
+    for (int i = 0; i < boardSize; i++) {
+        clearQueue(); 
+        frontIndex = 0, rearIndex = -1, sizequeue = 0; // Reset queue for each row
+        for (int j = 0; j < boardSize; j++) {
             if (board[i][j] != 0) {
                 if (sizequeue > 0 && queue[rearIndex] == board[i][j]) {
-                    queue[rearIndex] *= 2; // Nếu 2 ô bằng nhau thì gộp ô
+                    queue[rearIndex] *= 2; // If 2 cells are equal, merge the cells
                 } else {
-                    enqueue(board[i][j]); // Thêm vào queue
+                    enqueue(board[i][j]); // Add to queue
                 }
             }
         }
-        // Cập nhật lại hàng i
-        for (int j = 0; j < size; j++) {
+        // Update row i
+        for (int j = 0; j < boardSize; j++) {
             if (j < sizequeue) {
                 board[i][j] = queue[frontIndex + j];
             } else {
-                board[i][j] = 0; // Điền 0 vào ô trống
+                board[i][j] = 0; // Fill in 0 in the blank box
             }
         }
     }
 }
 
 void moveRight() {
-    for (int i = 0; i < size; i++) {
-        frontIndex = 0, rearIndex = -1, sizequeue = 0; // Reset queue cho mỗi hàng
-        for (int j = size - 1; j >= 0; j--) {
+    for (int i = 0; i < boardSize; i++) {
+        clearQueue(); 
+        frontIndex = 0, rearIndex = -1, sizequeue = 0; // Reset queue for each row
+        for (int j = boardSize - 1; j >= 0; j--) {
             if (board[i][j] != 0) {
                 if (sizequeue > 0 && queue[rearIndex] == board[i][j]) {
-                    queue[rearIndex] *= 2; // Nếu 2 ô bằng nhau thì gộp ô
+                    queue[rearIndex] *= 2; // If 2 cells are equal, merge the cells.
                 } else {
-                    enqueue(board[i][j]); // Thêm vào queue
+                    enqueue(board[i][j]); // Add to queue
                 }
             }
         }
-        // Cập nhật lại hàng i
-        for (int j = 0; j < size; j++) {
+        // Update row i
+        for (int j = 0; j < boardSize; j++) {
             if (j < sizequeue) {
-                board[i][size - 1 - j] = queue[frontIndex + j];
+                board[i][boardSize - 1 - j] = queue[frontIndex + j];
             } else {
-                board[i][size - 1 - j] = 0; // Điền 0 vào ô trống
+                board[i][boardSize - 1 - j] = 0; // Fill in 0 in the blank box
             }
         }
     }
 }
 
 void moveUp() {
-    for (int j = 0; j < size; j++) {
-        frontIndex = 0, rearIndex = -1, sizequeue = 0; // Reset queue cho mỗi cột
-        for (int i = 0; i < size; i++) {
+    for (int j = 0; j < boardSize; j++) {
+        clearQueue();
+        frontIndex = 0, rearIndex = -1, sizequeue = 0; // Reset queue for each column
+        for (int i = 0; i < boardSize; i++) {
             if (board[i][j] != 0) {
                 if (sizequeue > 0 && queue[rearIndex] == board[i][j]) {
-                    queue[rearIndex] *= 2; // Nếu 2 ô bằng nhau thì gộp ô
+                    queue[rearIndex] *= 2; // If 2 cells are equal, merge the cells
                 } else {
-                    enqueue(board[i][j]); // Thêm vào queue
+                    enqueue(board[i][j]); // Add to queue
                 }
             }
         }
-        // Cập nhật lại cột j
-        for (int i = 0; i < size; i++) {
+        // Update column j
+        for (int i = 0; i < boardSize; i++) {
             if (i < sizequeue) {
                 board[i][j] = queue[frontIndex + i];
             } else {
-                board[i][j] = 0; // Điền 0 vào ô trống
+                board[i][j] = 0; // Fill in 0 in the blank box
             }
         }
     }
 }
 
 void moveDown() {
-    for (int j = 0; j < size; j++) {
-        frontIndex = 0, rearIndex = -1, sizequeue = 0; // Reset queue cho mỗi cột
-        for (int i = size - 1; i >= 0; i--) {
+    for (int j = 0; j < boardSize; j++) {
+        clearQueue();
+        frontIndex = 0, rearIndex = -1, sizequeue = 0; // Reset queue for each column
+        for (int i = boardSize - 1; i >= 0; i--) {
             if (board[i][j] != 0) {
                 if (sizequeue > 0 && queue[rearIndex] == board[i][j]) {
-                    queue[rearIndex] *= 2; // Nếu 2 ô bằng nhau thì gộp ô
+                    queue[rearIndex] *= 2; // If 2 cells are equal, merge the cells.
                 } else {
-                    enqueue(board[i][j]); // Thêm vào queue
+                    enqueue(board[i][j]); // Add to queue
                 }
             }
         }
-        // Cập nhật lại cột j
-        for (int i = 0; i < size; i++) {
+        // Update column j
+        for (int i = 0; i < boardSize; i++) {
             if (i < sizequeue) {
-                board[size - 1 - i][j] = queue[frontIndex + i];
+                board[boardSize - 1 - i][j] = queue[frontIndex + i];
             } else {
-                board[size - 1 - i][j] = 0; // Điền 0 vào ô trống
+                board[boardSize - 1 - i][j] = 0; // Fill in 0 in the blank box
             }
         }
     }
@@ -99,9 +111,9 @@ void moveDown() {
 
 bool hasEmptyTile() 
 {
-    for (int i = 0; i < size; i++) {
-        for (int j = 0; j < size; j++) {
-            if (board[i][j] == 0) return true; // Tìm thấy ô trống
+    for (int i = 0; i < boardSize; i++) {
+        for (int j = 0; j < boardSize; j++) {
+            if (board[i][j] == 0) return true; // Found a blank cell
         }
     }
     return false;
@@ -109,13 +121,13 @@ bool hasEmptyTile()
 
 bool canMerge() 
 {
-    for (int i = 0; i < size; i++) 
+    for (int i = 0; i < boardSize; i++) 
     {
-        for (int j = 0; j < size; j++) 
+        for (int j = 0; j < boardSize; j++) 
         {
-            if ((i + 1 < size && board[i][j] == board[i + 1][j]) || 
-                (j + 1 < size && board[i][j] == board[i][j + 1])) 
-                return true; // Có thể gộp ô
+            if ((i + 1 < boardSize && board[i][j] == board[i + 1][j]) || 
+                (j + 1 < boardSize && board[i][j] == board[i][j + 1])) 
+                return true; // Cells can be merged.
         }
     }
     return false;
@@ -123,20 +135,20 @@ bool canMerge()
 
 bool canMove() 
 {
-    // Kiểm tra điều kiện thắng (2048) đầu tiên
-    for (int i = 0; i < size; i++) 
+    // Check the winning condition (2048) first
+    for (int i = 0; i < boardSize; i++) 
     {
-        for (int j = 0; j < size; j++) 
+        for (int j = 0; j < boardSize; j++) 
         {
             if (board[i][j] == 2048) 
             {
                 cout << "Chuc mung, ban da dat 2024" << endl;
-                return true; // Cho phép tiếp tục chơi sau chiến thắng
+                return true; // Allows resumption of play after win
             }
         }
     }
 
-    // Kiểm tra ô trống hoặc khả năng gộp ô
+    // Check for empty cells or cell merging
     if (hasEmptyTile() || canMerge()) return true;
 
     return false;
