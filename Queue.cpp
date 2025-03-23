@@ -6,13 +6,13 @@ int queue[1000];
 
 
 void enqueue(int x){
-    rearIndex++;
+    rearIndex = (rearIndex + 1) % 1000; // Loop mechanism
     queue[rearIndex] = x;
     sizequeue++;
 }
 
 void dequeue(){
-    frontIndex++;
+    frontIndex = (frontIndex + 1) % 1000; // Loop mechanism
     sizequeue--;
 }
 
