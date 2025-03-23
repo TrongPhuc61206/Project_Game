@@ -7,7 +7,7 @@ using namespace std;
 
 int main() 
 {
-    cout << "Nhap kich thuoc bang: ";
+    cout << "Enter board size: ";
     int n;
     cin >> n;
 
@@ -15,16 +15,16 @@ int main()
 
     while (canMove()) 
     {
-        system("cls"); // Xóa màn hình trước khi hiển thị lại bảng (Windows)
-        printBoard();  // Hiển thị bảng game
-        showInstructions(); // Hiển thị hướng dẫn ngay bên dưới bảng
+        system("cls"); // Clear screen before redisplaying panel (Windows)
+        printBoard();  // Show game board
+        showInstructions(); // Show instructions just below the table
 
         char c;
         do 
         {
             c = getMove();
         } 
-        while (c == '\0'); // Lặp lại nếu nhập sai ký tự
+        while (c == '\0'); // Repeat if wrong character entered
 
         if (c == 'w') moveUp();
         if (c == 's') moveDown();
@@ -33,6 +33,10 @@ int main()
 
         addRandom();
     }
+
+    cout << "Game Over!" << endl;
+    return 0;
+}
 
     cout << "Game Over!" << endl;
     return 0;
