@@ -7,7 +7,7 @@ using namespace std;
 
 int main() 
 {
-    cout << "Enter board size: ";
+    cout << "Enter the size of the table: ";
     int n;
     cin >> n;
 
@@ -38,4 +38,3 @@ int main()
     cout << "Game Over!" << endl;
     return 0;
 }
-
