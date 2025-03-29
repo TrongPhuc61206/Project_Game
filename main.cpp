@@ -32,12 +32,10 @@ int main()
         if (c == 'd') moveRight();
 
         addRandom();
+        addRandom();
     }
 
     cout << "Game Over!" << endl;
     return 0;
 }
 
-    cout << "Game Over!" << endl;
-    return 0;
-}
