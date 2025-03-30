@@ -1,14 +1,15 @@
 #include <iostream>
-#include <limits>
 #include "Board.h"
 #include "Movement.h"
 #include "input.h"
-#include "UndoRedo.h"
+#include "SaveGame.h"
+#include <fstream>
 #include "UserAuth.h"
+#include "Leaderboard.h"
 
 using namespace std;
 
-int main()
+int main() 
 {
     loadUsersFromFile(); // Tải danh sách người dùng từ file
 
@@ -19,7 +20,6 @@ int main()
     while (!(cin >> choice) || (choice != 1 && choice != 2))
     {
         cin.clear();
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');
         cout << "Invalid choice. Enter 1 or 2: ";
     }
     cin.ignore();
@@ -30,9 +30,9 @@ int main()
     if (choice == 1)
     {
         cout << "Enter username: ";
-        getline(cin, username);
+        cin >> username;
         cout << "Enter password: ";
-        getline(cin, password);
+        cin >> password;
         registerUser(username, password);
         saveUsersToFile();
         authenticated = true;
@@ -40,56 +40,65 @@ int main()
     else if (choice == 2)
     {
         cout << "Enter username: ";
-        getline(cin, username);
+        cin >> username;
         cout << "Enter password: ";
-        getline(cin, password);
+        cin >> password;
         authenticated = loginUser(username, password);
     }
+
 
     if (!authenticated)
     {
         cout << "Authentication failed. Exiting...\n";
         return 1;
     }
-
-    int n;
     cout << "Enter board size: ";
-    while (!(cin >> n) || n < 2)
-    {
-        cin.clear();
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        cout << "Invalid board size. Enter a number >= 2: ";
+    int n;
+    cin >> n;
+    string filename = username + ".txt";
+    ifstream file(filename);
+    if (file.good() && file.peek() != ifstream::traits_type::eof()) { 
+        ReadGame(filename); // Đọc game cũ
+    } else {
+        initBoard(n); // Tạo game mới
     }
+    file.close();
 
-    initBoard(n);
-
-    while (canMove())
+    while (canMove()) 
     {
-        system("cls");
-        printBoard();
-        showInstructions();
+        ReadGame(filename);
+        cout << "Score: " << score;
+        system("cls"); // Clear screen before redisplaying panel (Windows)
+        printBoard();  // Show game board
+        showInstructions(); // Show instructions just below the table
 
-        char move = getMove();
-        if (move == 'w' || move == 's' || move == 'a' || move == 'd')
+        char c;
+        do 
         {
-            saveState();
-            if (move == 'w') moveUp();
-            if (move == 's') moveDown();
-            if (move == 'a') moveLeft();
-            if (move == 'd') moveRight();
-            addRandom();
-            addRandom();
-        }
-        else if (move == 'z')
-        {
-            undoMove();
-        }
-        else if (move == 'y')
-        {
-            redoMove();
-        }
+            c = getMove();
+        } 
+        while (c == '\0'); // Repeat if wrong character entered
+
+        if (c == 'w') moveUp();
+        if (c == 's') moveDown();
+        if (c == 'a') moveLeft();
+        if (c == 'd') moveRight();
+
+        addRandom();
+        SaveGame(filename);
     }
-
-    cout << "Game Over!\n";
+    Node* root = nullptr;
+    player P  = data(score, username);
+    insertNode(root, P);
+    ofstream leaderboardfile("leaderboard.dat", ios::binary | ios::out); 
+    saveLeaderboard(root, leaderboardfile);
+    leaderboardfile.close();
+    loadLeaderboardFromFile("leaderboard.dat");
+    ClearFile(filename);
+    cout << "Game Over!" << endl;
+    cout << "Leader Board:" << endl;
+    PrintLeaderBoard(root);
+    score = 0;
     return 0;
 }
+
