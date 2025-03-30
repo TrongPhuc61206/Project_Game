@@ -1,10 +1,14 @@
-#pragma once
-#include <stack>
-#include <vector>
+#ifndef UNDO_REDO_H
+#define UNDO_REDO_H
 
-extern std::stack<std::vector<std::vector<int>>> undoStack;
-extern std::stack<std::vector<std::vector<int>>> redoStack;
+#include <vector>
+using namespace std;
+
+extern vector<vector<vector<int>>> undoStack;
+extern vector<vector<vector<int>>> redoStack;
 
 void saveState();
 void undoMove();
 void redoMove();
+
+#endif // UNDO_REDO_H
