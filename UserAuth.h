@@ -1,14 +1,16 @@
 #pragma once
 #include <string>
 
-struct User {
+struct User 
+{
     std::string username;
     std::string passwordHash;
     User* left;
     User* right;
 };
 
-class UserAuth {
+class UserAuth 
+{
 public:
     UserAuth();
     ~UserAuth();
