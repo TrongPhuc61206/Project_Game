@@ -2,7 +2,7 @@
 #include <iostream>
 #include "Board.h"
 #include "Queue.h"
-
+#include "UndoRedo.h"
 using namespace std;
 
 void clearQueue() 
@@ -14,6 +14,7 @@ void clearQueue()
 
 
 void moveLeft() {
+    saveState();
     for (int i = 0; i < boardSize; i++) {
         clearQueue(); 
         frontIndex = 0, rearIndex = -1, sizequeue = 0; // Reset queue for each row
@@ -38,6 +39,7 @@ void moveLeft() {
 }
 
 void moveRight() {
+    saveState();
     for (int i = 0; i < boardSize; i++) {
         clearQueue(); 
         frontIndex = 0, rearIndex = -1, sizequeue = 0; // Reset queue for each row
@@ -62,6 +64,7 @@ void moveRight() {
 }
 
 void moveUp() {
+    saveState();
     for (int j = 0; j < boardSize; j++) {
         clearQueue();
         frontIndex = 0, rearIndex = -1, sizequeue = 0; // Reset queue for each column
@@ -86,6 +89,7 @@ void moveUp() {
 }
 
 void moveDown() {
+    saveState();
     for (int j = 0; j < boardSize; j++) {
         clearQueue();
         frontIndex = 0, rearIndex = -1, sizequeue = 0; // Reset queue for each column
