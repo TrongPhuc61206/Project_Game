@@ -1,36 +1,35 @@
-#pragma once
+#ifndef MENU_H
+#define MENU_H
 
 #include <SFML/Graphics.hpp>
-#include <vector>
-#include <string>
-using namespace std;
-using namespace sf;
-// Constants
-const int MAX_BOARD_SIZE = 10;
-const int MIN_BOARD_SIZE = 4;
+extern const int MAX_BOARD_SIZE;
+extern const int MIN_BOARD_SIZE;
+// Các biến toàn cục dùng cho menu
+extern sf::RectangleShape newGameButton;
+extern sf::RectangleShape resumeGameButton;
+extern sf::RectangleShape leaderboardButton;
+extern sf::RectangleShape settingsButton;
 
-// Global Variables
-extern Font font;
-extern sf::Text newGameText;
-extern sf::Text resumeGameText;
-extern sf::Text leaderboardText;
-extern sf::Text settingsText;
-extern sf::Text backText;
-extern sf::Text boardSizeText;
+extern sf::RectangleShape settingsBoardSizeButton;
+extern sf::RectangleShape settingsBackButton;
 
-// Function Declarations
-void initGame(int &newsize);
-void drawBoard(RenderWindow &window);
-void drawGameOver(RenderWindow& window);
+extern sf::RectangleShape leaderboardTitle;
+extern sf::RectangleShape leaderboardBackButton;
 
+extern sf::Texture fontTexture;
+
+// Các hàm khởi tạo và xử lý menu
+bool loadFontTexture(const std::string& texturePath);
+void createButton(sf::RectangleShape &button, sf::Vector2f position, sf::Vector2f size, sf::Color color);
 void initMenu();
-void drawMainMenu(RenderWindow& window);
-void handleMenuInput(Event& event, RenderWindow& window, bool& gameRunning, bool& inMenu,
-                     bool& newGame, bool& resumeGame, bool& inSettings, bool& inLeaderboard);
+void drawMainMenu(sf::RenderWindow &window);
+void handleMenuInput(sf::Event &event, sf::RenderWindow &window, bool &gameRunning, bool &inMenu,
+                     bool &newGame, bool &resumeGame, bool &inSettings, bool &inLeaderboard);
 
-void drawSettingsMenu(RenderWindow& window, int& boardSize);
-void handleSettingsInput(sf::Event& event, RenderWindow& window, int& boardSize, bool& inSettings);
+void drawSettingsMenu(sf::RenderWindow &window, int &boardSize);
+void handleSettingsInput(sf::Event &event, sf::RenderWindow &window, int &boardSize, bool &inSettings);
 
-void drawLeaderboard(RenderWindow& window);
-void handleLeaderboardInput(RenderWindow& window, bool& inLeaderboard);
+void drawLeaderboard(sf::RenderWindow &window);
+void handleLeaderboardInput(sf::RenderWindow &window, bool &inLeaderboard);
 
+#endif // MENU_H
