@@ -81,21 +81,8 @@ void initGame(int &boardSize, std::vector<std::vector<int>> &board)
 {
     board.resize(boardSize, std::vector<int>(boardSize, 0));
     srand(static_cast<unsigned int>(time(0)));
-    generateTile(board, boardSize);
-    generateTile(board, boardSize);
-}
-
-// Tạo một ô mới với giá trị ngẫu nhiên
-void generateTile(std::vector<std::vector<int>> &board, int boardSize)
-{
-    int x = rand() % boardSize;
-    int y = rand() % boardSize;
-    while (board[x][y] != 0)
-    {
-        x = rand() % boardSize;
-        y = rand() % boardSize;
-    }
-    board[x][y] = (rand() % 2 + 1) * 2;
+    addRandom()
+    addRandom();
 }
 
 // Vẽ bảng trò chơi
