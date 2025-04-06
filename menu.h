@@ -7,7 +7,6 @@
 
  1. Xử lý logic trò chơi
 void initGame(int &boardSize, std::vector<std::vector<int>> &board);
-void generateTile(std::vector<std::vector<int>> &board, int boardSize);
 void drawBoard(sf::RenderWindow &window, const std::vector<std::vector<int>> &board, int boardSize);
 void drawGameOver(sf::RenderWindow &window);
 
