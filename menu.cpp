@@ -2,7 +2,6 @@
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
-#include <SFML/Graphics.hpp>
 
 const int MAX_BOARD_SIZE = 10; // Kích thước bảng lớn nhất
 const int MIN_BOARD_SIZE = 4; // Kích thước bảng nhỏ nhất
