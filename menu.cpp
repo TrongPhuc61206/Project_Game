@@ -1,191 +1,126 @@
 #include "menu.h"
 #include <iostream>
-#include <ctime>
-#include "Board.h" 
+#include <SFML/Graphics.hpp>
+#include "Board.h" // Assuming this defines boardSize and board
 
-void initGame(int &newsize) 
-{
-    boardSize = newsize;  // Set global boardSize
-    initBoard();          // Initialize the board
-} 
-void drawBoard(RenderWindow &window)
-{
-    float tileSize = 600.0f / boardSize;
-    for (int i = 0; i < boardSize; i++)
-    {
-        for (int j = 0; j < boardSize; j++)
-        {
-            RectangleShape tile(Vector2f(tileSize, tileSize));
-            tile.setPosition(Vector2f(j * tileSize, i * tileSize));
-            tile.setFillColor(board[i][j] ? Color(238, 228, 218) : Color(204, 192, 179));
-            window.draw(tile);
-        }
+const int MAX_BOARD_SIZE = 10; // Kích thước bảng tối đa
+const int MIN_BOARD_SIZE = 4; 
+
+// Define the global font as a texture or sprite-based text
+sf::Texture fontTexture;
+
+// Define the global menu text objects as rectangles
+sf::RectangleShape newGameButton;
+sf::RectangleShape resumeGameButton;
+sf::RectangleShape leaderboardButton;
+sf::RectangleShape settingsButton;
+
+sf::RectangleShape settingsBoardSizeButton;
+sf::RectangleShape settingsBackButton;
+
+sf::RectangleShape leaderboardTitle;
+sf::RectangleShape leaderboardBackButton;
+
+// Function to load a texture for text
+bool loadFontTexture(const std::string& texturePath) {
+    if (!fontTexture.loadFromFile(texturePath)) {
+        std::cerr << "Error loading texture!" << std::endl;
+        return false;
     }
+    return true;
 }
 
-void drawGameOver(RenderWindow &window)
-{
-    Text gameOverText(font, "Game Over", 50);
-    gameOverText.setFont(font);
-    gameOverText.setString("Game Over");
-    gameOverText.setCharacterSize(50);
-    gameOverText.setFillColor(Color::Red);
-    gameOverText.setPosition(Vector2f(200.f, 200.f));
-    window.draw(gameOverText);
+// Example function to create a button
+void createButton(sf::RectangleShape &button, sf::Vector2f position, sf::Vector2f size, sf::Color color) {
+    button.setPosition(position);
+    button.setSize(size);
+    button.setFillColor(color);
 }
 
-void initMenu()
-{
-    if(!font.openFromFile("arial.ttf"))
-    {
-        cout << "Error load  arial.ttf";
+void initMenu() {
+    // Load the font texture (you'll need to replace "font.png" with an actual texture file path)
+    if (!loadFontTexture("button_texture.png")) {
+        std::cerr << "Error loading button texture!" << std::endl;
+        return;
     }
 
-    newGameText.setFont(font);
-    newGameText.setString("New Game");
-    newGameText.setCharacterSize(40);
-    newGameText.setPosition(Vector2f(200.f, 150.f));
+    // Initialize the buttons with positions, sizes, and colors
+    createButton(newGameButton, sf::Vector2f(200.f, 150.f), sf::Vector2f(200.f, 50.f), sf::Color::Green);
+    createButton(resumeGameButton, sf::Vector2f(250.f, 220.f), sf::Vector2f(200.f, 50.f), sf::Color::Blue);
+    createButton(leaderboardButton, sf::Vector2f(200.f, 290.f), sf::Vector2f(200.f, 50.f), sf::Color::Yellow);
+    createButton(settingsButton, sf::Vector2f(250.f, 360.f), sf::Vector2f(200.f, 50.f), sf::Color::Cyan);
 
-    resumeGameText.setFont(font);
-    resumeGameText.setString("Resume");
-    resumeGameText.setCharacterSize(40);
-    resumeGameText.setPosition(Vector2f(250.f, 220.f));
+    // Settings menu
+    createButton(settingsBoardSizeButton, sf::Vector2f(180.f, 150.f), sf::Vector2f(200.f, 50.f), sf::Color::Magenta);
+    createButton(settingsBackButton, sf::Vector2f(250.f, 250.f), sf::Vector2f(200.f, 50.f), sf::Color::Red);
 
-    leaderboardText.setFont(font);
-    leaderboardText.setString("Leaderboard");
-    leaderboardText.setCharacterSize(40);
-    leaderboardText.setPosition(Vector2f(200.f, 290.f));
-
-    settingsText.setFont(font);
-    settingsText.setString("Settings");
-    settingsText.setCharacterSize(40);
-    settingsText.setPosition(Vector2f(250.f, 360.f));
+    // Leaderboard menu
+    createButton(leaderboardTitle, sf::Vector2f(150.f, 150.f), sf::Vector2f(300.f, 50.f), sf::Color::White);
+    createButton(leaderboardBackButton, sf::Vector2f(250.f, 400.f), sf::Vector2f(200.f, 50.f), sf::Color::Red);
 }
 
-void drawMainMenu(RenderWindow &window)
-{
-    window.draw(newGameText);
-    window.draw(resumeGameText);
-    window.draw(leaderboardText);
-    window.draw(settingsText);
+void drawMainMenu(sf::RenderWindow &window) {
+    window.draw(newGameButton);
+    window.draw(resumeGameButton);
+    window.draw(leaderboardButton);
+    window.draw(settingsButton);
 }
 
-void handleMenuInput(optional<Event> &event, RenderWindow &window, bool &gameRunning, bool &inMenu,
-                     bool &newGame, bool &resumeGame, bool &inSettings, bool &inLeaderboard)
-{
-    if (event && event->getIf<Event::Closed>())
-    {
-        window.close();
-    }
-    else if (Mouse::isButtonPressed(Mouse::Button::Left))
-    {
-        // Get the global mouse position relative to the window
-        Vector2i mousePos = Mouse::getPosition(window);
-        Vector2f mouseF(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y));
+void handleMenuInput(sf::Event &event, sf::RenderWindow &window, bool &gameRunning, bool &inMenu,
+                     bool &newGame, bool &resumeGame, bool &inSettings, bool &inLeaderboard) {
+    if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
+        sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+        sf::Vector2f mouseF(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y));
 
-        // Check for interactions with UI elements
-        if (newGameText.getGlobalBounds().contains(mouseF))
-        {
+        // Check for interactions with menu buttons
+        if (newGameButton.getGlobalBounds().contains(mouseF)) {
             newGame = true;
             inMenu = false;
             gameRunning = true;
-        }
-        else if (resumeGameText.getGlobalBounds().contains(mouseF))
-        {
+        } else if (resumeGameButton.getGlobalBounds().contains(mouseF)) {
             resumeGame = true;
             inMenu = false;
             gameRunning = true;
-        }
-        else if (leaderboardText.getGlobalBounds().contains(mouseF))
-        {
+        } else if (leaderboardButton.getGlobalBounds().contains(mouseF)) {
             inLeaderboard = true;
-        }
-        else if (settingsText.getGlobalBounds().contains(mouseF))
-        {
+        } else if (settingsButton.getGlobalBounds().contains(mouseF)) {
             inSettings = true;
         }
     }
-
-    // Example of setting mouse position relative to a window (if needed)
-    Mouse::setPosition(Vector2i(100, 200), window);
 }
 
-void drawSettingsMenu(RenderWindow &window, int &boardSize)
-{
-    boardSizeText.setFont(font);
-    boardSizeText.setString("Board Size: " + to_string(boardSize) + "x" + to_string(boardSize));
-    boardSizeText.setCharacterSize(40);
-    boardSizeText.setPosition(Vector2f(180.f, 150.f));
-
-    backText.setFont(font);
-    backText.setString("Back");
-    backText.setCharacterSize(40);
-    backText.setPosition(Vector2f(250.f, 250.f));
-
-    window.draw(boardSizeText);
-    window.draw(backText);
+void drawSettingsMenu(sf::RenderWindow &window, int &boardSize) {
+    window.draw(settingsBoardSizeButton);
+    window.draw(settingsBackButton);
 }
 
-void handleSettingsInput(optional<Event> &event, RenderWindow &window, int &boardSize, bool &inSettings)
-{
-    // Check if the window is being closed
-    if (event && event->getIf<Event::Closed>())
-    {
-        window.close();
-    }
+void handleSettingsInput(sf::Event &event, sf::RenderWindow &window, int &boardSize, bool &inSettings) {
+    if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
+        sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+        sf::Vector2f mouseF(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y));
 
-    // Detect mouse click and process interaction
-    if (Mouse::isButtonPressed(Mouse::Button::Left))
-    {
-        Vector2i mousePos = Mouse::getPosition(window); // Get the mouse position relative to the window
-        Vector2f mouseF(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y));
-
-        // Check if the mouse click interacts with boardSizeText
-        if (boardSizeText.getGlobalBounds().contains(mouseF))
-        {
+        if (settingsBoardSizeButton.getGlobalBounds().contains(mouseF)) {
             boardSize = (boardSize < MAX_BOARD_SIZE) ? boardSize + 1 : MIN_BOARD_SIZE;
         }
 
-        // Check if the mouse click interacts with backText
-        if (backText.getGlobalBounds().contains(mouseF))
-        {
-            inSettings = false; // Exit settings mode
+        if (settingsBackButton.getGlobalBounds().contains(mouseF)) {
+            inSettings = false;
         }
     }
 }
 
-void drawLeaderboard(RenderWindow &window)
-{
-    Text leaderboard(font, "Leaderboard", 50);
-    leaderboard.setFont(font);
-    leaderboard.setString("Leaderboard");
-    leaderboard.setCharacterSize(40);
-    leaderboard.setPosition(Vector2f(150.f, 150.f));
-    window.draw(leaderboard);
-
-    backText.setFont(font);
-    backText.setString("Back");
-    backText.setCharacterSize(40);
-    backText.setPosition(Vector2f(250.f, 400.f));
-    window.draw(backText);
+void drawLeaderboard(sf::RenderWindow &window) {
+    window.draw(leaderboardTitle);
+    window.draw(leaderboardBackButton);
 }
 
-void handleLeaderboardInput(RenderWindow &window, bool &inLeaderboard)
-{
-    // Check for left mouse button press
-    if (Mouse::isButtonPressed(Mouse::Button::Left))
-    {
-        // Get the global mouse position relative to the window
-        Vector2i mousePos = Mouse::getPosition(window);
-        Vector2f mouseF(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y));
+void handleLeaderboardInput(sf::RenderWindow &window, bool &inLeaderboard) {
+    if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
+        sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+        sf::Vector2f mouseF(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y));
 
-        // Check interaction with the "Back" button
-        if (backText.getGlobalBounds().contains(mouseF))
-        {
-            inLeaderboard = false; // Exit the leaderboard view
+        if (leaderboardBackButton.getGlobalBounds().contains(mouseF)) {
+            inLeaderboard = false;
         }
     }
-
-    // Optionally set mouse position (example)
-    Mouse::setPosition(Vector2i(100, 200), window); // Reset the cursor position
 }
