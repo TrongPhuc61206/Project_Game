@@ -10,6 +10,7 @@
 #include "UndoRedo.h"
 #include "tile.h"
 #include "menu.h"
+
 using namespace std;
 int main()
 {
@@ -20,7 +21,6 @@ int main()
     while (!(cin >> choice) || (choice != 1 && choice != 2))
     {
         cin.clear();
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');
         cout << "Invalid choice. Enter 1 or 2: ";
     }
 
@@ -53,7 +53,8 @@ int main()
     }
 
     string filename = username + ".txt";
-    int boardSize = 4;
+    int boardSize; // Or load from file
+    cin >> boardSize;
     int score = 0;
 
     const int tileSize = 100;
@@ -65,9 +66,16 @@ int main()
         "2048 Game",
         sf::Style::Default);
 
+    // Load font for tiles
+    if (!loadFont("arial.ttf"))
+    {
+        return -1; // Font loading failed, exiting
+    }
+
     centerWindow(window);
     window.setFramerateLimit(60);
-    // Trạng thái giao diện
+
+    // Game state
     bool inMenu = true, gameRunning = false, newGame = false, resumeGame = false;
     bool inSettings = false, inLeaderboard = false;
 
@@ -120,7 +128,20 @@ int main()
         }
 
         window.clear(sf::Color(187, 173, 160));
+        const int gridWidth = boardSize * tileSize + (boardSize - 1) * padding;
+        const int gridHeight = boardSize * tileSize + (boardSize - 1) * padding;
+        const int startX = (windowWidth - gridWidth) / 2;
+        const int startY = (windowHeight - gridHeight) / 2;
 
+        for (int i = 0; i < boardSize; ++i)
+        {
+            for (int j = 0; j < boardSize; ++j)
+            {
+                float x = startX + j * (tileSize + padding);
+                float y = startY + i * (tileSize + padding);
+                drawTile(window, board[i][j], x, y);
+            }
+        }
         if (inMenu)
         {
             drawMainMenu(window);
@@ -137,7 +158,7 @@ int main()
         {
             if (newGame)
             {
-                initGame(boardSize);
+                initBoard(boardSize);
                 newGame = false;
             }
             else if (resumeGame)
@@ -149,19 +170,10 @@ int main()
                 }
                 else
                 {
-                    initGame(boardSize);
+                    initBoard(boardSize);
                 }
                 file.close();
                 resumeGame = false;
-            }
-
-            drawBoard(window);
-
-            if (!canMove())
-            {
-                drawGameOver(window);
-                gameRunning = false;
-                inMenu = true;
             }
         }
 
