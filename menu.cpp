@@ -1,27 +1,14 @@
-
-#include "game.h"
+#include "menu.h"
 #include <iostream>
 #include <ctime>
-#include "Board.h"
+#include "Board.h" 
 
-using namespace std;
-using namespace sf;
-
-const int MAX_BOARD_SIZE = 10;
-const int MIN_BOARD_SIZE = 4;
-
-Font font;
-Text newGameText, resumeGameText, settingsText, leaderboardText, backText, boardSizeText;
-
-void initGame(int &boardSize, vector<vector<int>> &board)
+void initGame(int &newsize) 
 {
-    board = vector<vector<int>>(boardSize, vector<int>(boardSize, 0));
-    srand(static_cast<unsigned>(time(0)));
-    addRandom();
-    addRandom();
-}
-
-void drawBoard(RenderWindow &window, const vector<vector<int>> &board, int boardSize)
+    boardSize = newsize;  // Set global boardSize
+    initBoard();          // Initialize the board
+} 
+void drawBoard(RenderWindow &window)
 {
     float tileSize = 600.0f / boardSize;
     for (int i = 0; i < boardSize; i++)
@@ -49,7 +36,10 @@ void drawGameOver(RenderWindow &window)
 
 void initMenu()
 {
-    font.openFromFile("arial.ttf");
+    if(!font.openFromFile("arial.ttf"))
+    {
+        cout << "Error load  arial.ttf";
+    }
 
     newGameText.setFont(font);
     newGameText.setString("New Game");
@@ -59,17 +49,17 @@ void initMenu()
     resumeGameText.setFont(font);
     resumeGameText.setString("Resume");
     resumeGameText.setCharacterSize(40);
-    resumeGameText.setPosition(Vector2f(250.f, 250.f));
+    resumeGameText.setPosition(Vector2f(250.f, 220.f));
 
     leaderboardText.setFont(font);
     leaderboardText.setString("Leaderboard");
     leaderboardText.setCharacterSize(40);
-    leaderboardText.setPosition(Vector2f(200.f, 260.f));
+    leaderboardText.setPosition(Vector2f(200.f, 290.f));
 
     settingsText.setFont(font);
     settingsText.setString("Settings");
     settingsText.setCharacterSize(40);
-    settingsText.setPosition(Vector2f(250.f, 350.f));
+    settingsText.setPosition(Vector2f(250.f, 360.f));
 }
 
 void drawMainMenu(RenderWindow &window)
@@ -80,12 +70,10 @@ void drawMainMenu(RenderWindow &window)
     window.draw(settingsText);
 }
 
-void handleMenuInput(Event &event, RenderWindow &window, bool &gameRunning, bool &inMenu,
+void handleMenuInput(optional<Event> &event, RenderWindow &window, bool &gameRunning, bool &inMenu,
                      bool &newGame, bool &resumeGame, bool &inSettings, bool &inLeaderboard)
 {
-
-    optional<Event> eventtop;
-    if (eventtop && eventtop->getIf<Event::Closed>())
+    if (event && event->getIf<Event::Closed>())
     {
         window.close();
     }
@@ -138,11 +126,10 @@ void drawSettingsMenu(RenderWindow &window, int &boardSize)
     window.draw(backText);
 }
 
-void handleSettingsInput(Event &event, RenderWindow &window, int &boardSize, bool &inSettings)
+void handleSettingsInput(optional<Event> &event, RenderWindow &window, int &boardSize, bool &inSettings)
 {
     // Check if the window is being closed
-    optional<Event> eventtop;
-    if (eventtop && eventtop->getIf<Event::Closed>())
+    if (event && event->getIf<Event::Closed>())
     {
         window.close();
     }
@@ -182,6 +169,7 @@ void drawLeaderboard(RenderWindow &window)
     backText.setPosition(Vector2f(250.f, 400.f));
     window.draw(backText);
 }
+
 void handleLeaderboardInput(RenderWindow &window, bool &inLeaderboard)
 {
     // Check for left mouse button press
