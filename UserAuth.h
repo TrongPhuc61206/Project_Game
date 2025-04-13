@@ -1,21 +1,23 @@
-#ifndef USER_AUTH_H
-#define USER_AUTH_H
+#pragma once
+
+#include <SFML/Graphics.hpp>
 
 #include <string>
+using namespace std;
 
-// Cấu trúc dữ liệu cho User
+// Data structure for User
 struct User
 {
-    std::string username;
-    std::string passwordHash;
+    string username;
+    string passwordHash;
     User *left;
     User *right;
 };
 
-// Các hàm xử lý đăng nhập / đăng ký
-void registerUser(const std::string &username, const std::string &password);
-bool loginUser(const std::string &username, const std::string &password);
+// Login/Registration Handling Functions
+bool registerUser(const string &username, const string &password);
+bool loginUser(const string &username, const string &password);
+bool search(User *node, const string &username, const string &password);
 void saveUsersToFile();
 void loadUsersFromFile();
-
-#endif // USER_AUTH_H
+bool showLoginOrRegisterScreen(string&);
