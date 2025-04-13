@@ -1,11 +1,9 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include <string>
+
+extern sf::Font font;
 
 bool loadFont(const std::string& fontPath);
-
-void drawTile(sf::RenderWindow& window, int value, float x, float y);
-
-void drawBoard(sf::RenderWindow& window, int boardSize, int board[10][10], float startX, float startY);
+void drawBoard(sf::RenderWindow& window, float startX, float startY, float tileSize, float spacing, sf::Font& font);
 
 void centerWindow(sf::RenderWindow& window);
