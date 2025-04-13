@@ -237,35 +237,52 @@ bool showLoginOrRegisterScreen(std::string &outUsername)
 
                 if (registerBtn.getGlobalBounds().contains(pos))
                 {
-                    if (registerUser(usernameInput, passwordInput))
+                    if (!usernameInput.empty() && !passwordInput.empty())
                     {
-                        feedbackText.setString("Dang ky thanh cong!");
-                        feedbackText.setFillColor(sf::Color::Green);
-                        saveUsersToFile();
+                        if (registerUser(usernameInput, passwordInput))
+                        {
+                            feedbackText.setString("Dang ky thanh cong!");
+                            feedbackText.setFillColor(sf::Color::Green);
+                            saveUsersToFile();
+                        }
+                        else
+                        {
+                            feedbackText.setString("Username da ton tai");
+                            feedbackText.setFillColor(sf::Color::Red);
+                        }
                     }
                     else
                     {
-                        feedbackText.setString("Username da ton tai");
+                        feedbackText.setString("Vui long nhap day du thong tin");
                         feedbackText.setFillColor(sf::Color::Red);
                     }
                 }
 
                 if (loginBtn.getGlobalBounds().contains(pos))
                 {
-                    if (loginUser(usernameInput, passwordInput))
+                    if (!usernameInput.empty() && !passwordInput.empty())
                     {
-                        feedbackText.setString("Dang nhap thanh cong");
-                        feedbackText.setFillColor(sf::Color::Green);
-                        outUsername = usernameInput;
-                        window.close();
-                        return true;
+                        if (loginUser(usernameInput, passwordInput))
+                        {
+                            feedbackText.setString("Dang nhap thanh cong");
+                            feedbackText.setFillColor(sf::Color::Green);
+                            outUsername = usernameInput;
+                            window.close();
+                            return true;
+                        }
+                        else
+                        {
+                            feedbackText.setString("Sai username hoac password!");
+                            feedbackText.setFillColor(sf::Color::Red);
+                        }
                     }
                     else
                     {
-                        feedbackText.setString("Sai username hoặc password!");
+                        feedbackText.setString("Vui long nhap day du thong tin!");
                         feedbackText.setFillColor(sf::Color::Red);
                     }
                 }
+
             }
 
             if (event.type == sf::Event::TextEntered)
