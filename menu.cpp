@@ -2,7 +2,9 @@
 #include <iostream>
 #include "boardRenderer.h"
 #include "board.h"
+#include "Movement.h"
 
+// With gpt chat support for SFML graphics
 
 
 void showMainMenu(sf::RenderWindow& mainwindow)
@@ -13,11 +15,11 @@ void showMainMenu(sf::RenderWindow& mainwindow)
         std::cerr << "Cannot load font!\n";
         return;
     }
-
-
-    // Tính toán tileSize phù hợp với kích thước cửa sổ
+    addRandom();
+    addRandom();
+    // Calculate the tileSize appropriate for the window size
     float spacing = 10.f;
-    float maxBoardPixelWidth = 500.f; // Giới hạn kích thước tối đa của bảng
+    float maxBoardPixelWidth = 500.f; // Maximum size limit of the board
     float tileSize = (maxBoardPixelWidth - (boardSize - 1) * spacing) / boardSize;
 
     float boardWidth = boardSize * tileSize + (boardSize - 1) * spacing;
@@ -30,8 +32,10 @@ void showMainMenu(sf::RenderWindow& mainwindow)
     scoreBox.setPosition(30, 20);
     scoreBox.setOutlineThickness(2);
     scoreBox.setOutlineColor(sf::Color::Black);
-
-    sf::Text scoreText("SCORE\n1234", font, 20);
+    score = 9;
+    string score1 = to_string(score);
+    string Score = "Score\n " + score1;
+    sf::Text scoreText(Score, font, 20);
     scoreText.setFillColor(sf::Color::Black);
     scoreText.setPosition(scoreBox.getPosition().x + 10, scoreBox.getPosition().y + 5);
 
@@ -46,7 +50,7 @@ void showMainMenu(sf::RenderWindow& mainwindow)
     settingsText.setFillColor(sf::Color::Black);
     settingsText.setPosition(settingsBtn.getPosition().x + 10, settingsBtn.getPosition().y + 5);
 
-    // Các nút dưới bảng game
+    // Buttons below the game board
     const float buttonWidth = 120;
     const float buttonHeight = 50;
     const float buttonSpacing = 40;
@@ -79,7 +83,7 @@ void showMainMenu(sf::RenderWindow& mainwindow)
     leaderboardText.setFillColor(sf::Color::White);
     leaderboardText.setPosition(leaderboardBtn.getPosition().x + 5, leaderboardBtn.getPosition().y + 10);
 
-    // Vòng lặp menu
+    // Menu loop
     while (mainwindow.isOpen())
     {
         sf::Event event;
@@ -90,20 +94,16 @@ void showMainMenu(sf::RenderWindow& mainwindow)
 
             if (event.type == sf::Event::MouseButtonPressed)
             {
+
                 auto mousePos = mainwindow.mapPixelToCoords(sf::Mouse::getPosition(mainwindow));
 
-                if (newGameBtn.getGlobalBounds().contains(mousePos))
-                {
-
-                    std::cout << "New Game pressed\n";
-                    // Thêm xử lý tạo game mới
-                }
-                else if (resumeBtn.getGlobalBounds().contains(mousePos))
+                if (resumeBtn.getGlobalBounds().contains(mousePos))
                 {
                     std::cout << "Resume pressed\n";
                 }
                 else if (leaderboardBtn.getGlobalBounds().contains(mousePos))
                 {
+
                     std::cout << "Leaderboard pressed\n";
                 }
                 else if (settingsBtn.getGlobalBounds().contains(mousePos))
@@ -111,6 +111,20 @@ void showMainMenu(sf::RenderWindow& mainwindow)
                     std::cout << "Settings pressed\n";
                 }
             }
+
+            if (event.type == sf::Event::KeyPressed)
+            {
+                // xử lý phím W A S D
+                if (event.key.code == sf::Keyboard::W) moveUp();
+                if (event.key.code == sf::Keyboard::S) moveDown();
+                if (event.key.code == sf::Keyboard::A) moveLeft();
+                if (event.key.code == sf::Keyboard::D) moveRight();
+
+                 addRandom();
+            }
+            
+
+
         }
 
         mainwindow.clear(sf::Color::Black);
