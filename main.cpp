@@ -13,27 +13,18 @@
 
 using namespace std;
 
-//int boardSize;
-//int board[10][10];
-
-// ... (giữ nguyên các include và khai báo ở trên)
-
 int main()
 {
     std::string usernamelogin;
     sf::RenderWindow window(sf::VideoMode(600, 800), "2048 Game");
 
     if (!showLoginOrRegisterScreen(usernamelogin)) {
-        std::cout << "Login failed or window closed.\n";
+        std::cout << "Login failed or window closed " << endl;
         return 0;
     }
-
-    int boardSize;
-    int board[10][10];
-
     boardSize = showBoardSizeSelectionScreen();
     if (boardSize == -1) {
-        std::cout << "Invalid board size selected.\n";
+        std::cout << "Invalid board size selected " << endl;
         return 0;
     }
 
@@ -42,8 +33,9 @@ int main()
     initBoard(boardSize);
 
     sf::Font font;
-    if (!font.loadFromFile("fonts/arial.ttf")) {
-        std::cout << "Failed to load font!\n";
+    if (!font.loadFromFile("fonts/arial.ttf")) 
+    {
+        std::cout << "Failed to load font! " << endl;
         return 0;
     }
 
@@ -52,7 +44,7 @@ int main()
 
     while (window.isOpen())
     {
-        window.clear(sf::Color::Black);
+        window.clear(sf::Color::White);
 
         if (showMenu)
         {
@@ -60,25 +52,6 @@ int main()
         }
         else
         {
-            // Vẽ bảng game
-            float spacing = 10.f;
-            float topMargin = 120.f;
-            float bottomMargin = 100.f;
-
-            float availableWidth = window.getSize().x;
-            float availableHeight = window.getSize().y - topMargin - bottomMargin;
-
-            float maxTileSizeX = (availableWidth - (boardSize - 1) * spacing) / boardSize;
-            float maxTileSizeY = (availableHeight - (boardSize - 1) * spacing) / boardSize;
-
-            float tileSize = std::min(maxTileSizeX, maxTileSizeY);
-
-            float boardPixelSize = boardSize * tileSize + (boardSize - 1) * spacing;
-            float startX = (availableWidth - boardPixelSize) / 2.f;
-            float startY = topMargin + (availableHeight - boardPixelSize) / 2.f;
-
-            drawBoard(window, startX, startY, tileSize, spacing, font);
-
             sf::Event event;
             while (window.pollEvent(event))
             {
@@ -98,23 +71,23 @@ int main()
                 }
             }
 
-            // Thay thế xử lý phím với hàm getMove()
+            // Replace key handling with getMove() function
             if (!showMenu)
             {
 
                 if (event.key.code == sf::Keyboard::W) {
-                    moveUp();  // Di chuyển lên và cập nhật bảng
+                    moveUp();
                 }
                 else if (event.key.code == sf::Keyboard::S) {
-                    moveDown();  // Di chuyển xuống và cập nhật bảng
+                    moveDown();  // Move down and update the board
                 }
                 else if (event.key.code == sf::Keyboard::A) {
-                    moveLeft();  // Di chuyển sang trái và cập nhật bảng
+                    moveLeft();  // Move left and update the board
                 }
                 else if (event.key.code == sf::Keyboard::D) {
-                    moveRight();  // Di chuyển sang phải và cập nhật bảng
+                    moveRight();  // Move right and update the board
                 }
-                addRandom();  // Thêm số ngẫu nhiên vào bảng sau mỗi lần di chuyển
+                addRandom();  // Add a random number to the board after each move
             }
         }
 
@@ -123,7 +96,3 @@ int main()
 
     return 0;
 }
-
-
-    
-    
