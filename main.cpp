@@ -23,76 +23,62 @@ int main()
         return 0;
     }
     boardSize = showBoardSizeSelectionScreen();
-    if (boardSize == -1) {
-        std::cout << "Invalid board size selected " << endl;
-        return 0;
-    }
 
-    std::cout << "Board size selected: " << boardSize << "x" << boardSize << std::endl;
+    showMainMenu(window);
 
-    initBoard(boardSize);
-
-    sf::Font font;
+    /*sf::Font font;
     if (!font.loadFromFile("fonts/arial.ttf")) 
     {
         std::cout << "Failed to load font! " << endl;
         return 0;
-    }
+    }*/
 
-    bool showMenu = true;
-    int score = 0;
+  
+    //centerWindow(window);
+    //window.setFramerateLimit(60); 
 
-    while (window.isOpen())
-    {
-        window.clear(sf::Color::White);
+    //while (window.isOpen())
+    //{
+    //    sf::Event event;
+    //    while (window.pollEvent(event))
+    //    {
+    //        if (event.type == sf::Event::Closed) {
+    //            window.close();
+    //        }
 
-        if (showMenu)
-        {
-            showMainMenu(window);
-        }
-        else
-        {
-            sf::Event event;
-            while (window.pollEvent(event))
-            {
-                if (event.type == sf::Event::Closed)
-                    window.close();
+    //        if (event.type == sf::Event::KeyPressed) {
+    //            if (event.key.code == sf::Keyboard::W) moveUp();
+    //            if (event.key.code == sf::Keyboard::S) moveDown();
+    //            if (event.key.code == sf::Keyboard::A) moveLeft();
+    //            if (event.key.code == sf::Keyboard::D) moveRight();
+    //            if (event.key.code == sf::Keyboard::Z) undoMove();
+    //            if (event.key.code == sf::Keyboard::Y) redoMove();
 
-                if (event.type == sf::Event::KeyPressed)
-                {
-                    if (event.key.code == sf::Keyboard::Enter)
-                    {
-                        showMenu = false;
-                    }
-                    else if (event.key.code == sf::Keyboard::Escape)
-                    {
-                        showMenu = true;
-                    }
-                }
-            }
+    //            addRandom();
+    //        }
+    //    }
 
-            // Replace key handling with getMove() function
-            if (!showMenu)
-            {
+    //    window.clear(sf::Color(187, 173, 160));
+    //    int tileSize = 100;
+    //    int spacing = 10;
+    //    int boardPixelSize = boardSize * tileSize + (boardSize - 1) * spacing;
 
-                if (event.key.code == sf::Keyboard::W) {
-                    moveUp();
-                }
-                else if (event.key.code == sf::Keyboard::S) {
-                    moveDown();  // Move down and update the board
-                }
-                else if (event.key.code == sf::Keyboard::A) {
-                    moveLeft();  // Move left and update the board
-                }
-                else if (event.key.code == sf::Keyboard::D) {
-                    moveRight();  // Move right and update the board
-                }
-                addRandom();  // Add a random number to the board after each move
-            }
-        }
+    //    float startX = (window.getSize().x - boardPixelSize) / 2.f;
+    //    float startY = (window.getSize().y - boardPixelSize) / 2.f;
 
-        window.display();
-    }
+    //    //drawBoard(window, startX, startY, tileSize, spacing, font); // <-- PHẢI gọi ở đây
+    //    showMainMenu(window);
+
+
+    //    // Vẽ bảng game ở đây
+
+    //    window.display();
+
+    //    if (!canMove()) {
+    //        std::cout << "Game Over!\n";
+    //        break;
+    //    }
+    
 
     return 0;
 }
